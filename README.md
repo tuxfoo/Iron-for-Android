@@ -4,9 +4,6 @@
 
 Built with **Kotlin Multiplatform (KMP)**, Iron focuses on privacy, extensibility, and a seamless user experience—all without advertisements.
 
-[![Get it on Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=hag1987haaa.pebble.iron)
-*(Google Play and the Google Play logo are trademarks of Google LLC.)*
-
 ---
 
 ## 🍴 About this fork
@@ -38,7 +35,7 @@ This fork isn't on Google Play: build it from source. It's signed with a differe
 
 ## 🛠 Setup
 
-1. Install the **Iron** app from the **[Google Play Store](https://play.google.com/store/apps/details?id=hag1987haaa.pebble.iron)**.
+1. Build and install **Iron** from this repository.
 2. Install the **Iron for Pebble** watch app via a provider like **Cobble** or **Coreapp**.
 3. Grant necessary permissions: Location (Always), Notifications, and "Display over other apps" (required for the Assistant trigger).
 4. **This fork:** in Health Connect, allow Iron to read the body data you want used for calories (weight, height, body fat, resting heart rate, VO2max, BMR, plus heart rate and sleep for the resting heart rate estimate). Anything you don't allow falls back to the profile values in Iron's settings.
@@ -72,8 +69,6 @@ Developer: [hag1987haaa](https://x.com/1987haaa)
 『Iron』は、Pebbleスマートウォッチをプロ仕様のフィットネスツールとして蘇らせる、現代的なAndroid用スポーツトラッカーです。
 
 Kotlin Multiplatform (KMP) を採用し、広告なし、プライバシー重視、そして高度な拡張性を備えています。
-
-**[Google Play ストアで手に入れる](https://play.google.com/store/apps/details?id=hag1987haaa.pebble.iron)**
 
 ---
 
