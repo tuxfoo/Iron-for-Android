@@ -45,6 +45,9 @@ class SettingsViewModel(private val settings: AppSettings) : ViewModel() {
     private val _userWeight = MutableStateFlow(settings.userWeightKg)
     val userWeight: StateFlow<Float> = _userWeight.asStateFlow()
 
+    /** Body metrics from Health Connect; each value overrides the matching manual setting. */
+    val healthMetrics: StateFlow<hag1987haaa.pebble.iron.domain.model.HealthBodyMetrics> = settings.healthMetricsFlow
+
     private val _userHeightCm = MutableStateFlow(settings.userHeightCm)
     val userHeightCm: StateFlow<Float?> = _userHeightCm.asStateFlow()
 

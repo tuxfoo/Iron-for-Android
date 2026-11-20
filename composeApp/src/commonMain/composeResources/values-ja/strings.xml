@@ -93,6 +93,8 @@
     <string name="settings_resting_hr_desc">心拍数をカロリー計算に使い始める基準になります</string>
     <string name="settings_label_bmr">基礎代謝 (1日)</string>
     <string name="settings_bmr_desc">アクティブカロリーを求めるために差し引く安静時消費エネルギー。身長・体脂肪率より優先されます。</string>
+    <string name="settings_hc_in_use">Health Connect の %1$s を使用中。この欄は予備として使われます。</string>
+    <string name="settings_hc_estimated">睡眠中の心拍数から推定</string>
     <string name="settings_label_sex">性別</string>
     <string name="settings_sex_male">男性</string>
     <string name="settings_sex_female">女性</string>

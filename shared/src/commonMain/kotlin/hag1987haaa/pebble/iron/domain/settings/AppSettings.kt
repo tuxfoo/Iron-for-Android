@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import hag1987haaa.pebble.iron.domain.model.ActivityType
 import hag1987haaa.pebble.iron.domain.model.BiologicalSex
 import hag1987haaa.pebble.iron.domain.model.CalorieProfile
+import hag1987haaa.pebble.iron.domain.model.HealthBodyMetrics
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -406,17 +407,26 @@ class AppSettings {
     var userSex: BiologicalSex = BiologicalSex.MALE
     var userBirthDate: LocalDate? = null
 
+    /** Latest body metrics read from Health Connect (cached so background work can use them). */
+    private val _healthMetrics = MutableStateFlow(HealthBodyMetrics())
+    val healthMetricsFlow: StateFlow<HealthBodyMetrics> = _healthMetrics.asStateFlow()
+    var healthMetrics: HealthBodyMetrics
+        get() = _healthMetrics.value
+        set(value) { _healthMetrics.value = value }
+
     fun userAgeYears(today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())): Int? =
         userBirthDate?.yearsUntil(today)?.takeIf { it in 5..120 }
 
     fun calorieProfile(): CalorieProfile = CalorieProfile(
-        weightKg = userWeightKg,
+        // Health Connect is the source of truth; the manual values are fallbacks.
+        weightKg = healthMetrics.weightKg ?: userWeightKg,
         sex = userSex,
         ageYears = userAgeYears() ?: CalorieProfile.DEFAULT_AGE_YEARS,
-        heightCm = userHeightCm?.toDouble(),
-        bodyFatPct = userBodyFatPct?.toDouble(),
-        restingHr = userRestingHr,
-        bmrKcalPerDay = userBmrKcalPerDay?.toDouble(),
+        heightCm = healthMetrics.heightCm ?: userHeightCm?.toDouble(),
+        bodyFatPct = healthMetrics.bodyFatPct ?: userBodyFatPct?.toDouble(),
+        restingHr = healthMetrics.restingHr ?: userRestingHr,
+        bmrKcalPerDay = healthMetrics.bmrKcalPerDay ?: userBmrKcalPerDay?.toDouble(),
+        vo2Max = healthMetrics.vo2Max,
     )
     var hasAskedHealthConnectOnboarding: Boolean = false
     var appVersion: String = "2.1.3"

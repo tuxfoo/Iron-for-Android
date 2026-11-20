@@ -3,6 +3,7 @@ package hag1987haaa.pebble.iron.util
 import hag1987haaa.pebble.iron.domain.model.ActivityType
 import hag1987haaa.pebble.iron.domain.model.BiologicalSex
 import hag1987haaa.pebble.iron.domain.model.CalorieProfile
+import hag1987haaa.pebble.iron.domain.model.HealthBodyMetrics
 import hag1987haaa.pebble.iron.domain.settings.AppSettings
 import kotlinx.datetime.LocalDate
 import kotlin.math.abs
@@ -103,6 +104,27 @@ class HealthUtilsTest {
         assertEquals(22.0, q.bodyFatPct)
         assertEquals(55, q.restingHr)
         assertEquals(1500.0, q.bmrKcalPerDay)
+    }
+
+    @Test
+    fun healthConnectOverridesManualValues() {
+        val s = AppSettings().apply {
+            userWeightKg = 70f
+            userHeightCm = 170f
+            userRestingHr = 60
+            userBmrKcalPerDay = 1600f
+        }
+        s.healthMetrics = HealthBodyMetrics(weightKg = 82.5f, restingHr = 52, vo2Max = 48.0)
+        val p = s.calorieProfile()
+        assertEquals(82.5f, p.weightKg)
+        assertEquals(52, p.restingHr)
+        assertEquals(48.0, p.vo2Max)
+        // Not in Health Connect: manual values are the fallback
+        assertEquals(170.0, p.heightCm)
+        assertEquals(1600.0, p.bmrKcalPerDay)
+        s.healthMetrics = HealthBodyMetrics()
+        assertEquals(70f, s.calorieProfile().weightKg)
+        assertEquals(60, s.calorieProfile().restingHr)
     }
 
     @Test

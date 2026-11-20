@@ -43,6 +43,7 @@ fun PhoneSettingsTab(viewModel: SettingsViewModel, actions: AppActions, onShowLi
     val tcxUri by viewModel.autoExportTcxUri.collectAsState()
     val gpxUri by viewModel.autoExportGpxUri.collectAsState()
     var showCourseSheet by remember { mutableStateOf(false) }
+    val hcMetrics by viewModel.healthMetrics.collectAsState()
     val userHeightCm by viewModel.userHeightCm.collectAsState()
     val userBodyFatPct by viewModel.userBodyFatPct.collectAsState()
     val userRestingHr by viewModel.userRestingHr.collectAsState()
@@ -74,6 +75,12 @@ fun PhoneSettingsTab(viewModel: SettingsViewModel, actions: AppActions, onShowLi
                     value = ( (displayWeight * 10).toInt() / 10.0 ).toString(),
                     onValueChange = { it.toFloatOrNull()?.let { input -> viewModel.updateUserWeight(if (isMetric) input else (input / 2.20462f)) } },
                     label = { Text(stringResource(Res.string.settings_label_weight)) },
+                    supportingText = hcMetrics.weightKg?.let { kg ->
+                        {
+                            val shown = (((if (isMetric) kg else kg * 2.20462f) * 10).roundToInt() / 10.0)
+                            Text(stringResource(Res.string.settings_hc_in_use, "$shown ${if (isMetric) "kg" else "lb"}"))
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     suffix = { Text(if (isMetric) "kg" else "lb") }
                 )
@@ -131,6 +138,7 @@ fun PhoneSettingsTab(viewModel: SettingsViewModel, actions: AppActions, onShowLi
                     value = userHeightCm,
                     label = stringResource(Res.string.settings_label_height),
                     description = stringResource(Res.string.settings_height_desc),
+                    healthConnectValue = hcMetrics.heightCm?.let { cm -> if (isMetric) "${cm.roundToInt()} cm" else "${(cm / 2.54).roundToInt()} in" },
                     suffix = if (isMetric) "cm" else "in",
                     validRange = 100f..250f,
                     resetKey = isMetric,
@@ -142,6 +150,7 @@ fun PhoneSettingsTab(viewModel: SettingsViewModel, actions: AppActions, onShowLi
                     value = userBodyFatPct,
                     label = stringResource(Res.string.settings_label_body_fat),
                     description = stringResource(Res.string.settings_body_fat_desc),
+                    healthConnectValue = hcMetrics.bodyFatPct?.let { "${(it * 10).roundToInt() / 10.0}%" },
                     suffix = "%",
                     validRange = 3f..60f,
                     decimals = true,
@@ -151,6 +160,9 @@ fun PhoneSettingsTab(viewModel: SettingsViewModel, actions: AppActions, onShowLi
                     value = userRestingHr?.toFloat(),
                     label = stringResource(Res.string.settings_label_resting_hr),
                     description = stringResource(Res.string.settings_resting_hr_desc),
+                    healthConnectValue = hcMetrics.restingHr?.let { bpm ->
+                        if (hcMetrics.restingHrEstimated) "$bpm bpm (${stringResource(Res.string.settings_hc_estimated)})" else "$bpm bpm"
+                    },
                     suffix = "bpm",
                     validRange = 30f..110f,
                     onValueChange = { viewModel.updateUserRestingHr(it?.roundToInt()) },
@@ -159,6 +171,7 @@ fun PhoneSettingsTab(viewModel: SettingsViewModel, actions: AppActions, onShowLi
                     value = userBmr,
                     label = stringResource(Res.string.settings_label_bmr),
                     description = stringResource(Res.string.settings_bmr_desc),
+                    healthConnectValue = hcMetrics.bmrKcalPerDay?.let { "${it.roundToInt()} kcal" },
                     suffix = "kcal",
                     validRange = 800f..4500f,
                     onValueChange = viewModel::updateUserBmr,
@@ -669,6 +682,8 @@ private fun OptionalNumberField(
     description: String,
     suffix: String,
     validRange: ClosedFloatingPointRange<Float>,
+    /** Formatted Health Connect value; when present it is used instead of this field. */
+    healthConnectValue: String? = null,
     decimals: Boolean = false,
     resetKey: Any? = null,
     toDisplay: (Float) -> Float = { it },
@@ -693,7 +708,9 @@ private fun OptionalNumberField(
             onValueChange(v?.takeIf { it in validRange })
         },
         label = { Text(label) },
-        supportingText = { Text(description) },
+        supportingText = {
+            Text(healthConnectValue?.let { stringResource(Res.string.settings_hc_in_use, it) } ?: description)
+        },
         isError = invalid,
         keyboardOptions = KeyboardOptions(keyboardType = if (decimals) KeyboardType.Decimal else KeyboardType.Number),
         singleLine = true,

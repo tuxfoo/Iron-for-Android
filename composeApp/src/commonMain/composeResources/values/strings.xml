@@ -93,6 +93,8 @@
     <string name="settings_resting_hr_desc">Sets the heart rate above which heart rate is used for calories</string>
     <string name="settings_label_bmr">BMR (per day)</string>
     <string name="settings_bmr_desc">Resting energy, subtracted to give active calories. Takes priority over height and body fat.</string>
+    <string name="settings_hc_in_use">Using %1$s from Health Connect. This field is only a fallback.</string>
+    <string name="settings_hc_estimated">estimated from sleep heart rate</string>
     <string name="settings_label_sex">Sex</string>
     <string name="settings_sex_male">Male</string>
     <string name="settings_sex_female">Female</string>
