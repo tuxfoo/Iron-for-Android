@@ -9,6 +9,19 @@ Built with **Kotlin Multiplatform (KMP)**, Iron focuses on privacy, extensibilit
 
 ---
 
+## 🍴 About this fork
+
+This is a fork of **[Iron](https://github.com/hag1987haaa/Iron-for-Android)** by hag1987haaa. It differs from the official app in two ways:
+
+- **Calories are calculated from your Health Connect data.** Iron reads your latest **weight, height, body fat, resting heart rate, VO2max and BMR** from Health Connect, so the estimate keeps up as they change. If there's no resting heart rate record (for example, your watch app writes heart rate and sleep but not resting heart rate), Iron estimates it from your heart rate during sleep. The profile values you enter in Iron's settings are only used when Health Connect has no value. The official Iron only *writes* to Health Connect and uses the values you enter.
+- **GPS works without Google Play Services** (e.g. GrapheneOS, or LineageOS without GApps). Iron uses Google's fused location when Play Services is available, and Android's own location service otherwise.
+
+The calorie model itself, and the GPS fallback, have been proposed to the official app ([#8](https://github.com/hag1987haaa/Iron-for-Android/pull/8), [#7](https://github.com/hag1987haaa/Iron-for-Android/pull/7)). Reading from Health Connect is specific to this fork.
+
+This fork isn't on Google Play: build it from source. It's signed with a different key, so it can't update the Google Play version of Iron.
+
+---
+
 ## ✨ Key Features
 
 - **Voice Assistant Integration**: Trigger Google Assistant or Gemini directly from your wrist by long-pressing a Pebble button. (Uses phone/headset mic).
@@ -28,6 +41,7 @@ Built with **Kotlin Multiplatform (KMP)**, Iron focuses on privacy, extensibilit
 1. Install the **Iron** app from the **[Google Play Store](https://play.google.com/store/apps/details?id=hag1987haaa.pebble.iron)**.
 2. Install the **Iron for Pebble** watch app via a provider like **Cobble** or **Coreapp**.
 3. Grant necessary permissions: Location (Always), Notifications, and "Display over other apps" (required for the Assistant trigger).
+4. **This fork:** in Health Connect, allow Iron to read the body data you want used for calories (weight, height, body fat, resting heart rate, VO2max, BMR, plus heart rate and sleep for the resting heart rate estimate). Anything you don't allow falls back to the profile values in Iron's settings.
 
 ---
 
@@ -46,6 +60,8 @@ We respect and appreciate the original developers for their contribution to the 
 Iron is built with a "Privacy First" mindset. No ads, no tracking.
 👉 [Privacy Policy for Iron](https://hagtime.com/?page_id=364)
 
+**This fork:** the policy above describes the official app, which doesn't read Health Connect. This fork reads the Health Connect data listed above, but only the types you allow. It uses them on your phone to calculate calories and doesn't send them anywhere.
+
 ### Contact
 Developer: [hag1987haaa](https://x.com/1987haaa)
 
@@ -58,6 +74,17 @@ Developer: [hag1987haaa](https://x.com/1987haaa)
 Kotlin Multiplatform (KMP) を採用し、広告なし、プライバシー重視、そして高度な拡張性を備えています。
 
 **[Google Play ストアで手に入れる](https://play.google.com/store/apps/details?id=hag1987haaa.pebble.iron)**
+
+---
+
+## 🍴 このフォークについて
+
+これは hag1987haaa 氏の **[Iron](https://github.com/hag1987haaa/Iron-for-Android)** のフォークです。公式版との違い:
+
+- **消費カロリーをヘルスコネクトのデータから計算します。** 最新の体重・身長・体脂肪率・安静時心拍数・VO2max・基礎代謝をヘルスコネクトから読み取ります。安静時心拍数の記録がない場合は、睡眠中の心拍数から推定します。Iron の設定で入力した値は、ヘルスコネクトに値がない場合のみ使用されます。公式版はヘルスコネクトへの書き込みのみを行います。
+- **Google Play 開発者サービスがなくても GPS が動作します**（GrapheneOS など）。
+
+読み取ったデータはスマホ内でのカロリー計算にのみ使用され、外部には送信されません。このフォークは Google Play では配布していません。
 
 ---
 
